@@ -13,6 +13,9 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
     <script>
       tailwind.config = {
         theme: {
@@ -2961,6 +2964,60 @@ function formatDateTime(dateString) {
   return date.toLocaleString('uz-UZ', options);
 }
 
+    </script>
+    <script>
+      // Firebase sozlamalari
+      var firebaseConfig = {
+  apiKey: "AIzaSyAqwyX4YesNZf0pKF2efyVUa3o_yFXHZ2Q",
+  authDomain: "khamidxvl-8b061.firebaseapp.com",
+  databaseURL: "https://khamidxvl-8b061-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "khamidxvl-8b061",
+  storageBucket: "khamidxvl-8b061.appspot.com",
+  messagingSenderId: "951770839143",
+  appId: "1:951770839143:web:81c837351c2ce3d2b13cc2"
+};
+
+    
+      // Firebase’ni ishga tushirish
+      firebase.initializeApp(firebaseConfig);
+      var db = firebase.database();
+    
+      // Test mahsulot qo‘shish
+      var testProduct = {
+        name: "Non",
+        price: 5000,
+        stock: 100,
+        unit: "sanoq",
+        type: "Oziq-ovqat"
+      };
+    
+      // Firebase’ga yozish
+      db.ref("products").push(testProduct);
+    
+      // O‘qish (logda ko‘rsatish)
+      db.ref("products").once("value").then(function(snapshot) {
+        console.log("Mahsulotlar:", snapshot.val());
+      });
+    </script>
+    <script>
+      // Test mahsulot
+      var testProduct = {
+        name: "Non",
+        price: 5000,
+        stock: 100,
+        unit: "sanoq",
+        type: "Oziq-ovqat"
+      };
+    
+      // Firebase’ga yozish
+      db.ref("products").push(testProduct).then(() => {
+        console.log("✅ Mahsulot qo‘shildi:", testProduct);
+      });
+    
+      // Firebase’dan o‘qish
+      db.ref("products").once("value").then(snapshot => {
+        console.log("📦 Mahsulotlar ro‘yxati:", snapshot.val());
+      });
     </script>
   </body>
 </html>
