@@ -1508,11 +1508,23 @@
 }
 
        ];
-         localStorage.removeItem("products");
-  localStorage.setItem("products", JSON.stringify(defaultProducts));
+       let products = [];
 
-  let products = JSON.parse(localStorage.getItem("products")) || [];
-      
+firebase.database().ref("products").once("value").then((snapshot) => {
+  const data = snapshot.val();
+  if (data) {
+    products = Object.values(data);
+  } else {
+    products = defaultProducts;
+    firebase.database().ref("products").set(
+      Object.fromEntries(defaultProducts.map((p) => [p.id, p]))
+    );
+  }
+
+  renderProducts();
+  renderStock();
+});
+
       let cart = [];
       let salesHistory = JSON.parse(localStorage.getItem("salesHistory")) || [];
       let debtors = JSON.parse(localStorage.getItem("debtors")) || [];
@@ -1564,6 +1576,50 @@
         "close-pay-debt-modal"
       );
       const saveProductBtn = document.getElementById("save-product");
+      // Saqlash tugmasi bosilganda mahsulotni Firebase'ga yozish
+saveProductBtn.addEventListener("click", function () {
+  const newProductId = Date.now(); // noyob ID
+
+  const newProduct = {
+    id: newProductId,
+    name: modalProductName.value,
+    price: parseFloat(modalProductPrice.value),
+    stock: parseFloat(modalProductQuantity.value),
+    type: modalProductType.value,
+    unit: unitKg.checked ? "kg" : "sanoq",
+  };
+
+  // Hajm va og‘irlik turlari uchun
+  if (newProduct.type === "drink") {
+    newProduct.volume = modalProductVolume.value;
+  }
+  if (newProduct.type === "snacks") {
+    newProduct.weight = modalProductWeight.value;
+  }
+
+  // Firebase'ga yozish
+  firebase.database().ref("products/" + newProductId).set(newProduct, function (error) {
+    if (error) {
+      alert("Xatolik yuz berdi: " + error.message);
+    } else {
+      showNotification("Mahsulot muvaffaqiyatli saqlandi ✅");
+    }
+  });
+
+  // Forma tozalash
+  modalProductName.value = "";
+  modalProductPrice.value = "";
+  modalProductQuantity.value = "";
+  modalProductType.value = "other";
+  modalProductVolume.value = "";
+  modalProductWeight.value = "";
+  unitKg.checked = false;
+  unitSanoq.checked = false;
+
+  // Modalni yopish
+  productModal.classList.add("hidden");
+});
+
       const cancelProductBtn = document.getElementById("cancel-product");
       const saveStockUpdateBtn = document.getElementById("save-stock-update");
       const cancelStockUpdateBtn = document.getElementById(
@@ -2962,14 +3018,41 @@ function formatDateTime(dateString) {
     hour12: false
   };
   return date.toLocaleString('uz-UZ', options);
+
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAqywYAyesN2fOpKF2efyVUa3O_yFXH2ZQ",
+    authDomain: "khamidxvl-8b061.firebaseapp.com",
+    databaseURL: "https://khamidxvl-8b061-default-rtdb.firebaseio.com",
+    projectId: "khamidxvl-8b061",
+    storageBucket: "khamidxvl-8b061.appspot.com",
+    messagingSenderId: "951770839143",
+    appId: "1:951770839143:web:81c837351c2ce3d2b13cc2"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+
+}
+function deleteProduct(productId) {
+  const confirmDelete = confirm("Ushbu mahsulotni o‘chirishni istaysizmi?");
+  if (!confirmDelete) return;
+
+  firebase.database().ref("products/" + productId).remove()
+    .then(() => {
+      showNotification("Mahsulot o‘chirildi ✅");
+    })
+    .catch((error) => {
+      alert("Xatolik: " + error.message);
+    });
 }
 
+
     </script>
-    <script>
+   <!-- <script>
       // Firebase sozlamalari
       var firebaseConfig = {
   apiKey: "AIzaSyAqwyX4YesNZf0pKF2efyVUa3o_yFXHZ2Q",
-  authDomain: "khamidxvl-8b061.firebaseapp.com",
+  authDomain: "kha midxvl-8b061.firebaseapp.com",
   databaseURL: "https://khamidxvl-8b061-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: "khamidxvl-8b061",
   storageBucket: "khamidxvl-8b061.appspot.com",
@@ -3018,6 +3101,6 @@ function formatDateTime(dateString) {
       db.ref("products").once("value").then(snapshot => {
         console.log("📦 Mahsulotlar ro‘yxati:", snapshot.val());
       });
-    </script>
+    </script> -->
   </body>
 </html>
