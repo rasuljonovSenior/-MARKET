@@ -2147,6 +2147,44 @@
                 }
             });
         });
+        // mahsulot qoshish
+        document.addEventListener('DOMContentLoaded', function () {
+      document.getElementById('save-product').addEventListener('click', function () {
+          const name = document.getElementById('modal-product-name').value.trim();
+          const type = document.getElementById('modal-product-type').value;
+          const volume = parseFloat(document.getElementById('modal-product-volume').value) || null;
+          const weight = parseInt(document.getElementById('modal-product-weight').value) || null;
+          const quantity = parseFloat(document.getElementById('modal-product-quantity').value);
+          const price = parseFloat(document.getElementById('modal-product-price').value);
+          const unit = document.querySelector('input[name="unit"]:checked')?.value;
+
+          if (!name || !type || !unit || isNaN(quantity) || isNaN(price)) {
+              alert("Iltimos, barcha maydonlarni to'ldiring.");
+              return;
+          }
+
+          const newProduct = {
+              id: Date.now(),
+              name,
+              type,
+              unit,
+              stock: quantity,
+              price,
+          };
+
+          if (type === 'drink') newProduct.volume = volume;
+          if (type === 'snacks') newProduct.weight = weight;
+
+          saveToFirebase('products', newProduct, function (success) {
+              if (success) {
+                  showNotification("Mahsulot saqlandi!", "success");
+                  document.getElementById("product-modal").classList.add("hidden");
+              } else {
+                  showNotification("Xatolik yuz berdi. Qayta urinib ko'ring.", "danger");
+              }
+          });
+      });
+  });
  </script>
  </body>
 </html>
