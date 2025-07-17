@@ -184,22 +184,45 @@
     </div>
 
     <!-- Login Screen -->
-    <!-- <div id="login-screen" class="fixed inset-0 bg-gray-100 flex items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-xl shadow-lg p-8 w-full max-w-sm">
-            <h2 class="text-2xl font-bold text-center text-primary mb-6">Tizimga Kirish</h2>
-            <div class="space-y-4">
-                <input type="text" id="login-username" placeholder="Login" 
-                    class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" />
-                <input type="password" id="login-password" placeholder="Parol" 
-                    class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" />
-                <p id="login-error" class="text-danger text-sm hidden">Login yoki parol noto'g'ri</p>
-                <button onclick="login()" 
-                    class="w-full bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg font-medium">
-                    Kirish
-                </button>
-            </div>
+    <div
+      id="login-screen"
+      class="fixed inset-0 bg-gray-100 flex items-center justify-center z-50 hidden"
+    >
+      <div class="bg-white rounded-xl shadow-lg p-8 w-full max-w-sm">
+        <h2 class="text-2xl font-bold text-center text-primary mb-6">
+          Tizimga Kirish
+        </h2>
+        <h2 class="text-xl font-bold text-left text-primary">
+          <span class="text-xl font-medium color-black">Login:Demo</span>
+        </h2>
+        <h2 class="text-xl font-medium text-left text-primary mb-2">
+          <span>Password:Demo123</span>
+        </h2>
+        <div class="space-y-4">
+          <input
+            type="text"
+            id="login-username"
+            placeholder="Login"
+            class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+          <input
+            type="password"
+            id="login-password"
+            placeholder="Parol"
+            class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+          <p id="login-error" class="text-danger text-sm hidden">
+            Login yoki parol noto'g'ri
+          </p>
+          <button
+            onclick="login()"
+            class="w-full bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg font-medium"
+          >
+            Kirish
+          </button>
         </div>
-    </div> -->
+      </div>
+    </div>
 
     <!-- Connection Status -->
     <div
@@ -1581,7 +1604,7 @@
         const password = document.getElementById("login-password").value.trim();
         const loginError = document.getElementById("login-error");
 
-        if (username === "Registon" && password === "ikromjon03") {
+        if (username === "Demo" && password === "Demo123") {
           sessionStorage.setItem("isLoggedIn", "true");
           document.getElementById("login-screen").classList.add("hidden");
           document.getElementById("loading-screen").classList.add("hidden");
